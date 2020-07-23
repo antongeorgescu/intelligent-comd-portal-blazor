@@ -1,0 +1,32 @@
+﻿@page "/"
+@using Microsoft.AspNetCore.Html;
+@using Microsoft.AspNetCore.Mvc;
+
+
+<h1>Configuration and Operations Monitoring Portal (COMP)</h1>
+
+<h3>Purpose</h3>
+
+<p>
+    Administration portals in general, and Student Lending admin portal in particular, facilitate the execution and tracking of two critical aspects of non-functional activities, hence providing an important helper tool to production operations and support teams:
+    <ul>
+        <li><b>Configuration</b> (incl application and component settings, user authorization security through roles and permissions, resource authorization etc.)</li>
+        <li><b>Operations Monitoring</b> (incl batch processing status, job schedules, exception tracking, application and component performance monitoring etc.)</li>
+    </ul>
+</p>
+
+<h3>Vision and Basic Requirements</h3>
+<p><b>COMP</b> stands for “Configuration and Operations Monitoring Portal.”</p>
+<p><b>COMP</b> is required by both production support and product development teams to play the role of a hub of information for the application health monitoring needs. It will need to collect data, process it and render it into a useful format that is easily consumed by various users.</p>
+<p><b>COMP</b> is a complex piece of work due to a few major aspects:</p>
+<p>
+    <ul>
+        <li>Needs to be build as a hub with both “portal tiles” that requires in-house development and “portal links” that redirect the users to various out-of-box specialized tools.</li>
+        <li>While the portal tiles could, but not being restricted to, display summary information for quick and meaningful updates, the portal links take the user to detailed information</li>
+        <li>As a hub needs to enforce access security through Single-Sign-On [SSO] which is highly recommended, or through tool specific authentication/authorization (to be avoided if possible.)</li>
+        <li>For those cases when field mapping between data provided by various components and even tools may be needed, it needs to play the role of a “data broker”</li>
+    </ul>
+</p>
+<p>Detailed design information can be found at <a href="https://finastra.sharepoint.com/:w:/r/Structured/CSLPTransitionIn/Shared%20Documents/Architecture/Architecture%20Team/Administration%20Portals/SL-Configuration%20and%20Operations%20Monitoring%20Portal%20v1.docx?d=w6d7bcbc5188148f8ba09e23d415e165f&csf=1&web=1&e=NyTgov"><b>SL-Configuration and Operations Monitoring Portal v1</b> document</a></p>
+<br />
+<p>COMP Dashboard is getting built and maintained by Loan Star Architecture Team. Please contact <a href="mailto:anton.georgescu@finastra.com">Anton Georgescu, TEMS Architect</a> for any inquiries.</p>

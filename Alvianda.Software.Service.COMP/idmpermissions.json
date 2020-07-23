@@ -1,0 +1,11 @@
+﻿{
+  "Controllers": {
+    "EventViewer": {
+      "Roles": {
+        "COMPAgent": {
+          "Permissions": [ "API.LogReader.LogEntriesPaged","API.LogReader.Charts" ]
+        }
+      }
+    }
+  }
+}

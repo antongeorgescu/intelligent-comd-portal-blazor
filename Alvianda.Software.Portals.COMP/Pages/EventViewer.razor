@@ -1,0 +1,128 @@
+﻿@page "/eventviewer"
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+<h3>Event Viewer Logs</h3>
+
+<p class="default-font">This data is collected from the host server <b>@MachineIdentity</b></p>
+@if (Logs == null)
+{
+    <p><mark><i>Loading page components...</i></mark></p>
+}
+else
+{
+    <table class="table" style='font-size:small;line-height: 1.428;'>
+        <tbody>
+            <tr>
+                <td>
+                    <div>
+                        <label for="start">Log Type:</label>
+                        <select value="@SelectedLog" @onchange="@SelectItem" class="select-box">
+                            <option>=== Select Log ===</option>
+                            @foreach (var log in Logs)
+                            {
+                                <option value="@log.Name">@log.DisplayName</option>
+                            }
+                        </select>
+                    </div>
+                </td>
+                <td class="text-left">
+                    <table>
+                        <tr>
+                            <td>
+                                <label style="width:73px;" for="start">Start date:</label>
+                                <input type="date" id="startdate" name="search-start" @onchange="SelectStartDate" value="@fromDate" style='font-size:small;line-height: 1.428;'>
+                                <label for="start">End date:</label>
+                                <input type="date" id="enddate" name="search-end" @onchange="SelectEndDate" value="@toDate" style='font-size:small;line-height: 1.428;'>
+                            </td>
+                            <td>
+                                <button class="btn btn-primary" @onclick="@GetDatedLogEntries" style='font-size:small;line-height: 1.428;width:179px;'>Get Entries in Date Range</button>
+                            </td>
+                            <td>
+                                <button class="btn btn-primary" disabled="@(string.IsNullOrEmpty(LongMessage) ? "disabled" : null)" @onclick="@ClearEntryDetails" style='font-size:small;line-height: 1.428;'>Clear Entry Details</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <table style="width:100%;">
+                                    <tr>
+                                        <td style="width:73px;"><label for="start">Keywords:</label></td>
+                                        <td><input type="text" id="keyword" name="search-keyword" @onchange="SetKeywordList" value="@keywordList" style='font-size:small;line-height: 1.428;width:100%'></td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td>
+                                <button class="btn btn-primary" @onclick="@GetKeywordListEntries" style='font-size:small;line-height: 1.428;width:179px;'>Get Entries by Keywords</button>
+                            </td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Maximum number of returned entries:&nbsp;</label><input type="text" value="@CapMaxRecs" @onchange="ChangedCappedMaxRecs" style='font-size:small;line-height: 1.428;width:50px;' />
+                                <button class="btn btn-primary" @onclick="@UpdateCappedMaxRecs" style='font-size:small;line-height: 1.428;'>Update Cap</button>
+                            </td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    @if (isError)
+    {
+        <p style='font-size:small;color:red'>@LongMessage</p>
+    }
+    else
+    {
+        <p style='font-size:small;'>@(new MarkupString(LongMessage))</p>
+    }
+
+    @if (SelectedLog != null)
+    {
+        @if (LogEntries == null)
+        {
+            <p><mark><i>@retrievEntriesMsg</i></mark></p>
+        }
+        else
+        {
+            <table class="table table-striped">
+                <thead style='font-size:small;'>
+                    <tr>
+                        @*<th scope="col">Event ID</th>*@
+                        <th scope="col">Instance Id</th>
+                        <th scope="col">Time Generated</th>
+                        <th scope="col">Machine Name</th>
+                        <th scope="col">Notification</th>
+                        <th scope="col">Source</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody style='font-size:small;'>
+                    @if (LogEntries.Count > 0)
+                    {
+                        @foreach (var logEntry in LogEntries)
+                        {
+                            <tr>
+                                @*<td>@logEntry.Id</td>*@
+                                <td>@logEntry.InstanceId</td>
+                                <td>@logEntry.TimeGenerated.ToString()</td>
+                                <td>@logEntry.MachineName</td>
+                                <td>@(new MarkupString(logEntry.MessageShort))</td>
+                                <td>@logEntry.Source</td>
+                                <td class="text-center" style='font-size:small;line-height: 1.428;'>
+                                    @*<button class="@DetailBtnAttributes[logEntry.Id].Item1" style='font-size:small;line-height: 1.428;' @onclick="@(e => ShowMessage(logEntry, e))">@DetailBtnAttributes[logEntry.Id].Item2</button>*@
+                                    <button class="btn btn-outline-info" style='font-size:small;line-height: 1.428;' @onclick="@(() => ShowLogEntryDetails(logEntry))">Event Details</button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+            <div>
+                <Pager2 PageIndex=@pageIndex TotalPages=@totalPages OnClick="PageIndexChanged"
+                        HasNextPage=@hasNextPage HasPreviousPage=@hasPreviousPage MaxRecords=@maxRecords></Pager2>
+            </div>
+        }
+    }
+}

@@ -1,0 +1,59 @@
+﻿<div class="top-row pl-4 navbar navbar-dark">
+    <a class="navbar-brand" style="font-size:larger" href="">COMP Dashboard</a>
+    <button class="navbar-toggler" @onclick="ToggleNavMenu">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</div>
+
+<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+    <ul class="nav flex-column">
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="oi oi-home" aria-hidden="true"></span><h5> Home</h5>
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="" @onclick="()=>expandSubNav = !expandSubNav">
+                <span class="oi oi-plus" aria-hidden="true"></span><h5> E-Viewer</h5>
+            </NavLink>
+            @if (expandSubNav)
+            {
+                <ul>
+                    <li>
+                        <NavLink class="expand-menu" href="eventviewer">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span><h6> Event Log Entries</h6>
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink class="expand-menu" href="eventcharts">
+                            <span class="oi oi-graph" aria-hidden="true"></span><h6> Event Log Charts</h6>
+                        </NavLink>
+                    </li>
+                </ul>
+            }
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="kenticologger">
+                <span class="oi oi-list-rich" aria-hidden="true"></span><h5> Kentico Logger</h5>
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="httprequesttester">
+                <span class="oi oi-plus" aria-hidden="true"></span><h5> Http Request Tester</h5>
+            </NavLink>
+        </li>
+    </ul>
+</div>
+
+@code {
+    private bool collapseNavMenu = true;
+
+    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private bool expandSubNav;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}

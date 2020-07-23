@@ -1,0 +1,299 @@
+﻿@page "/eventviewerpaged2"
+
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using System.Net.Http.Headers
+@using Microsoft.Extensions.Configuration
+@using COMPortal.Data
+
+@inject HttpClient Http
+@inject IAccessTokenProvider AuthService
+@inject IConfiguration Config
+@inject EventViewerService DataService
+@inject IJSRuntime jsRuntime
+
+
+@attribute [Authorize]
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+@*<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js">*@
+
+<h5>Event Viewer Logs</h5>
+
+<p class="default-font">This data is collected from the host server @MachineIdentity</p>
+@if (Logs == null)
+{
+    <p>Loading....</p>
+}
+else
+{
+    <table class="table" style='font-size:small;line-height: 1.428;'>
+        <tbody>
+            <tr>
+                <td>
+                    <select value="@SelectedLog" @onchange="@SelectItem" class="custom-select" style='font-size:small;line-height: 1.428;'>
+                        <option>=== Select Log ===</option>
+                        @foreach (var log in Logs)
+                        {
+                            <option value="@log.Name">@log.DisplayName</option>
+                        }
+                    </select>
+                </td>
+                <td class="text-center">
+                    @*<button class="btn btn-success" @onclick="@GetLogEntries" style='font-size:small;line-height: 1.428;'>Get Selected Log Entries</button>*@
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <p class="default-font">@LongMessage</p>
+    @*<p class="default-font">Page @pageNumber out of @totalPages</p>*@
+    <div>
+        <Pager2 PageIndex=@pageIndex TotalPages=@totalPages OnClick="PageIndexChanged"
+                HasNextPage=@hasNextPage HasPreviousPage=@hasPreviousPage MaxRecords=@maxRecords></Pager2>
+    </div>
+    @if (SelectedLog != null)
+    {
+        @if (LogEntries == null)
+        {
+            <p>Reading records...</p>
+        }
+        else
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Event ID</th>
+                        <th scope="col">Instance Id</th>
+                        <th scope="col">Time Generated</th>
+                        <th scope="col">Machine Name</th>
+                        <th scope="col">Notification</th>
+                        <th scope="col">Source</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (LogEntries.Count > 0)
+                    {
+                        @foreach (var logEntry in LogEntries)
+                        {
+                            <tr>
+                                <td>@logEntry.Id</td>
+                                <td>@logEntry.InstanceId</td>
+                                <td>@logEntry.TimeGenerated.ToString()</td>
+                                <td>@logEntry.MachineName</td>
+                                <td>@logEntry.MessageShort</td>
+                                <td>@logEntry.Source</td>
+                                <td class="text-center" style='font-size:small;line-height: 1.428;'>
+                                    <button class="@DetailBtnAttributes[logEntry.Id].Item1" style='font-size:small;line-height: 1.428;' @onclick="@(e => ShowMessage(logEntry, e))">@DetailBtnAttributes[logEntry.Id].Item2</button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        }
+    }
+}
+
+@code {
+    private string MachineIdentity { get; set; }
+
+    public PaginatedList<EventViewerEntry> paginatedList; // = new PaginatedList<EventViewerEntry>();
+
+    private List<Log> Logs;
+    public string SelectedLog { get; set; }
+    private string LongMessage { get; set; }
+    private int SelectedId { get; set; }
+
+    private List<EventViewerEntry> LogEntries;
+
+    private IDictionary<long, Tuple<string, string>> DetailBtnAttributes = new Dictionary<long, Tuple<string, string>>();
+
+    protected override async Task OnInitializedAsync() => await GetLogs();
+
+    int totalPages { get; set; }
+    int pageIndex;
+    bool hasNextPage;
+    bool hasPreviousPage;
+    int maxRecords;
+
+    // Page and Sort data
+    int? pageNumber = 1;
+    //string currentSortField = "Name";
+    //string currentSortOrder = "Asc";
+
+    //private async Task Sort(string sortField)
+    //{
+    //    if (sortField.Equals(currentSortField))
+    //    {
+    //        currentSortOrder = currentSortOrder.Equals("Asc") ? "Desc" : "Asc";
+    //    }
+    //    else
+    //    {
+    //        currentSortField = sortField;
+    //        currentSortOrder = "Asc";
+    //    }
+    //    await GetLogEntries();
+    //}
+
+    //private string SortIndicator(string sortField)
+    //{
+    //    if (sortField.Equals(currentSortField))
+    //    {
+    //        return currentSortOrder.Equals("Asc") ? "fa fa-sort-asc" : "fa fa-sort-desc";
+    //    }
+    //    return string.Empty;
+    //}
+
+    public async Task PageIndexChanged(int newPageNumber)
+    {
+        if (newPageNumber < 1 || newPageNumber > totalPages)
+        {
+            return;
+        }
+        pageNumber = newPageNumber;
+
+        await GetLogEntries();
+
+        StateHasChanged();
+    }
+
+
+    private async Task GetLogs()
+    {
+        MachineIdentity = Config.GetSection("EventViewerLoggerAPI").GetValue<string>("EventViewerHostMachine");
+
+        paginatedList = new PaginatedList<EventViewerEntry>();
+
+        try
+        {
+            // get a new access token if not cached
+            if (Http.DefaultRequestHeaders.Authorization == null)
+            {
+                var tokenResult = await AuthService.RequestAccessToken();
+                string jwt = string.Empty;
+                if (tokenResult.TryGetToken(out var token))
+                {
+                    Http.DefaultRequestHeaders.Add("Authorization", $"Bearer {token.Value}");
+                    jwt = $"Bearer {token.Value}";
+                }
+            }
+
+            var serviceEndpoint = $"{Config.GetSection("EventViewerLoggerAPI").GetValue<string>("BaseURI")}/api/logreader/logs/categories";
+            var logs = await Http.GetFromJsonAsync<List<Log>>(serviceEndpoint);
+
+            Logs = new List<Log>();
+            foreach (var log in logs)
+                Logs.Add(new Log() { Name = log.Name, DisplayName = log.DisplayName });
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            LongMessage = $"Authorization error:{exception.Message} [{exception.InnerException.Message}]";
+        }
+        catch (UnauthorizedAccessException exception)
+        {
+            LongMessage = $"Authorization error:{exception.Message} [{exception.InnerException.Message}]";
+        }
+        catch (Exception exception)
+        {
+            LongMessage = $"Error:{exception.Message} [{exception.InnerException.Message}]";
+        }
+    }
+
+    private async Task GetLogEntries()
+    {
+        if (SelectedLog == null)
+            return;
+
+        if (SelectedLog == "=== Select Log ===")
+            return;
+
+        try
+        {
+            // get a new access token if not already cached
+            if (Http.DefaultRequestHeaders.Authorization == null)
+            {
+                var tokenResult = await AuthService.RequestAccessToken();
+                string jwt = string.Empty;
+                if (tokenResult.TryGetToken(out var token))
+                {
+                    Http.DefaultRequestHeaders.Add("Authorization", $"Bearer {token.Value}");
+                    jwt = $"Bearer {token.Value}";
+                }
+            }
+
+            var serviceEndpoint = $"{Config.GetSection("EventViewerLoggerAPI").GetValue<string>("BaseURI")}/api/logreader/logs/records/{SelectedLog}/{pageNumber}";
+            var response = await Http.GetAsync(serviceEndpoint);
+            response.EnsureSuccessStatusCode();
+
+            using var responseStream = await response.Content.ReadAsStreamAsync();
+            var paginatedList = await System.Text.Json.JsonSerializer.DeserializeAsync<PaginatedList<EventViewerEntry>>(responseStream, new System.Text.Json.JsonSerializerOptions
+            {
+                PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase,
+                PropertyNameCaseInsensitive = true,
+            });
+
+            LogEntries = paginatedList.Items;
+
+            DetailBtnAttributes.Clear();
+            LogEntries.ForEach(x => DetailBtnAttributes.Add(x.Id, new Tuple<string, string>("btn btn-success", "Show Details")));
+
+            totalPages = paginatedList.TotalPages;
+            pageIndex = paginatedList.PageIndex;
+            hasNextPage = paginatedList.HasNextPage;
+            hasPreviousPage = paginatedList.HasPreviousPage;
+            maxRecords = paginatedList.MaxRecords;
+
+            StateHasChanged();
+
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            LongMessage = $"Authorization error:{exception.Message} [{exception.InnerException.Message}]";
+        }
+        catch (UnauthorizedAccessException exception)
+        {
+            LongMessage = $"Authorization error:{exception.Message} [{exception.InnerException.Message}]";
+        }
+        catch (Exception exception)
+        {
+            LongMessage = $"Error:{exception.Message} [{exception.InnerException.Message}]";
+        }
+    }
+
+    private void ShowMessage(EventViewerEntry entry, MouseEventArgs e)
+    {
+
+        if (DetailBtnAttributes[entry.Id].Item2 == "Hide Details")
+        {
+            LongMessage = string.Empty;
+            DetailBtnAttributes[entry.Id] = new Tuple<string, string>("btn btn-success", "Show Details");
+        }
+        else
+        {
+            LongMessage = $"Details for Event ID {entry.Id}: {entry.Message}";
+            DetailBtnAttributes[entry.Id] = new Tuple<string, string>("btn btn-warning", "Hide Details");
+        }
+
+        if (SelectedId != entry.Id)
+            DetailBtnAttributes[SelectedId] = new Tuple<string, string>("btn btn-success", "Show Details");
+
+        SelectedId = entry.Id;
+    }
+
+    public async Task SelectItem(ChangeEventArgs e)
+    {
+        SelectedLog = Convert.ToString(e.Value);
+
+        pageNumber = 1;
+        await GetLogEntries();
+    }
+
+    public class Log
+    {
+        public string Name { get; set; }
+        public string DisplayName { get; set; }
+    }
+
+}
+

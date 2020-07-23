@@ -1,0 +1,51 @@
+﻿@page "/eventcharts"
+
+@using ChartJs.Blazor.Charts
+
+<h3>Event Log Charts</h3>
+<p class="default-font">This data is collected from the host server <b>@MachineIdentity</b></p>
+
+<table>
+    <tr>
+        <td>
+            <label style="width:73px;" for="start">Start date:</label>
+            <input type="date" id="startdate" name="search-start" @onchange="SelectStartDate" value="@fromDate" style='font-size:small;line-height: 1.428;'>
+            <label for="start">End date:</label>
+            <input type="date" id="enddate" name="search-end" @onchange="SelectEndDate" value="@toDate" style='font-size:small;line-height: 1.428;'>
+        </td>
+        <td>
+            <select @bind="SelectedChartType" class="select-box">
+                <option>=== Select Chart Type ===</option>
+                <option value="pieChart">Pie Chart</option>
+                <option value="barChart">Bar Chart</option>
+            </select>
+        </td>
+        <td>
+            <button class="btn btn-primary" style='font-size:small;line-height: 1.428;width:179px;' @onclick="BuildChartLogCategsPerDateRange">Logs Distribution Chart</button>
+        </td>
+    </tr>
+</table>
+@if (isError)
+{
+    <p style='font-size:small;color:red'>@errMessage</p>
+}
+@if (!isChartData)
+{
+    <p><mark><i>@loadingMessage</i></mark></p>
+}
+else if (SelectedChartType == "pieChart")
+{
+    <div style="visibility:@pieChartVisible">
+        <ChartJsPieChart @ref="_pieChartJs" Config="@_pieConfig" Width="600" Height="300" />
+    </div>
+}
+else if (SelectedChartType == "barChart")
+{
+    <div style="visibility:@barChartVisible">
+        <ChartJsBarChart @ref="_barChartJs" Config="@_barConfig" Width="600" Height="300" />
+    </div>
+}
+@*<p>Debugging info:@debugInfo</p>*@
+
+
+

@@ -1,0 +1,17 @@
+﻿@inherits LayoutComponentBase
+@using Alvianda.Software.Portals.COMP.Shared
+
+<div class="sidebar">
+    <NavMenu />
+</div>
+
+<div class="main">
+    <div class="top-row px-4">
+        <LoginDisplay />
+        <a href="http://blazor.net" target="_blank" class="ml-md-auto">About Microsoft Blazor</a>
+    </div>
+
+    <div class="content px-4">
+        @Body
+    </div>
+</div>
