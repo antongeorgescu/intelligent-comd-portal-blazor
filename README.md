@@ -1,5 +1,26 @@
-# Configuration and Operations Monitoring Dashboard (COMD)
-## Design Option: Blazor with Web Assembly
+# Intelligent Configuration and Operations Monitoring Dashboard (iCOM)
+
+## Rationale behind iCOM
+
+Part of their production support mandate, the Operations teams have to not only understand the nature of the system failures or degradation in functionality and performance, but also foresee the troubles laying ahead based on the current parameters.
+Machine Learning technology can help with that, by applying predictive models to the huge amounts of textual information stored in various log files attached to various applications, components and tools.
+In order to achieve that we can either use various models, either linear regression based (and hence applicable to time series based events) or categorical (with applicability to event classification.)
+The proposed solution, title Intelligent Configuration and Operations Monitoring (iCOM) is using a few popular classification algorithms, powering models with supervised training, to achieve a few goals:
+* automatically categorise the events criticality level
+* predict the areas that are prone to increased degradation of functionality and performance
+* render information about the usage level of various components of the system
+* etc.   
+
+## Component Design
+
+The design is based on a rich client/action & data service pattern, with a combination of user and roles authenticated through Azure OpenID Connect, and permissions managed through a local identity management component. "Permissions" are seen here as the highest granularity level of authroization control, applicable to the method/function level.The local permissions are to be seen as an extension to Azure AD roles. As an alternative the roles "scopes" can be used as permissions store.
+
+The rich client is using a Single Page Application (SPA) implementation that enhances the user experience and decreases the traffic between the browser and the backend service.
+
+Below is the component diagram view.
+![iCOM Dashboard Design](https://user-images.githubusercontent.com/6631390/88387494-8b9c3680-cd80-11ea-9fec-29d169cd8200.png)
+
+## Implementation Option: Blazor with Web Assembly
 
 * Web Assembly compiles code into low-level byte code Web Assembly Modules (WASM) that Web browsers can directly execute without having to parse a source file.
 * Web Assembly is a parallel technology to JavaScript and exists side-by-side with the JavaScript runtime in the **web browser virtual machine (VM)*.
@@ -43,6 +64,3 @@ There are a number of features WebAssembly does not support, therefore Blazor do
 * The payload is not negligible as it requires the load of a sizable WASM module, plus the JavaScript loader and interop handler code that has to be loaded into the browser for each page. 
 * The load is getting comparable with the loads required by full frameworks like Angular, Ember, or Aurelia
 * Performance is still inferior to JavaScript framework, but the advantage of using C# and .NET libs may overtake that
-
-
-
