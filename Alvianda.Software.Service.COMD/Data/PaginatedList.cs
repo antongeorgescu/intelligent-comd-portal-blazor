@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Alvianda.Software.Service.COMP.Data
+namespace Alvianda.Software.Service.COMD.Data
 {
     public class PaginatedList<T>
     {

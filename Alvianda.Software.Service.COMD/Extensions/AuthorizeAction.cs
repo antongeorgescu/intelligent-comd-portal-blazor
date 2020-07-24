@@ -2,14 +2,14 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Alvianda.Software.Service.COMP.Data;
+using Alvianda.Software.Service.COMD.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
-namespace Alvianda.Software.Service.COMP.Extensions
+namespace Alvianda.Software.Service.COMD.Extensions
 {
     public class AuthorizePermission : System.Web.Mvc.AuthorizeAttribute, Microsoft.AspNetCore.Mvc.Filters.IAuthorizationFilter
     {

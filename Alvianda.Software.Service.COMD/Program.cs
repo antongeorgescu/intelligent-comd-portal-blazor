@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Alvianda.Software.Service.COMP
+namespace Alvianda.Software.Service.COMD
 {
     public class Program
     {

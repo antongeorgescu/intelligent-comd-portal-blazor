@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Alvianda.Software.Service.COMP.Data
+namespace Alvianda.Software.Service.COMD.Data
 {
     public static class MockPermissionsData
     {

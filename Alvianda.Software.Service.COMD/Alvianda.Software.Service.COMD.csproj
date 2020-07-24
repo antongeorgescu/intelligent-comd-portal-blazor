@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <AssemblyName>Alvianda.Software.Service.COMP</AssemblyName>
-    <RootNamespace>Alvianda.Software.Service.COMP</RootNamespace>
+    <AssemblyName>Alvianda.Software.Service.COMD</AssemblyName>
+    <RootNamespace>Alvianda.Software.Service.COMD</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

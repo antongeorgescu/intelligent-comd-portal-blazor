@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Alvianda.Software.Service.COMP.Extensions
+namespace Alvianda.Software.Service.COMD.Extensions
 {
     public static class ObjectExtensions
     {

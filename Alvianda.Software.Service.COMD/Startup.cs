@@ -10,9 +10,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
-using Alvianda.Software.Service.COMP.Classes;
+using Alvianda.Software.Service.COMD.Classes;
 
-namespace Alvianda.Software.Service.COMP
+namespace Alvianda.Software.Service.COMD
 {
     public class Startup
     {

@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Alvianda.Software.Service.COMP.Classes;
+using Alvianda.Software.Service.COMD.Classes;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Http;
-using Alvianda.Software.Service.COMP.Extensions;
-using Alvianda.Software.Service.COMP.Data;
+using Alvianda.Software.Service.COMD.Extensions;
+using Alvianda.Software.Service.COMD.Data;
 using Microsoft.Extensions.Configuration;
 using System.Text.RegularExpressions;
 using System.Security.Cryptography;
@@ -18,7 +18,7 @@ using System.Security.Cryptography;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace Alvianda.Software.Service.COMP.Controllers
+namespace Alvianda.Software.Service.COMD.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

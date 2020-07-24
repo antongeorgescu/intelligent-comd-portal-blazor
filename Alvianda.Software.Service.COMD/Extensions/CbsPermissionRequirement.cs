@@ -10,7 +10,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
-namespace Alvianda.Software.Service.COMP.Extensions
+namespace Alvianda.Software.Service.COMD.Extensions
 {
     public class CbsPermissionRequirement : TypeFilterAttribute
     {
