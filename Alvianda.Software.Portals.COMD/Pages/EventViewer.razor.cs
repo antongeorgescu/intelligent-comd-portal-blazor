@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.Extensions.Configuration;
-using Alvianda.Software.Portals.COMP.Data;
+using Alvianda.Software.Portals.COMD.Data;
 using System.Net.Http;
 using Microsoft.JSInterop;
 using Microsoft.AspNetCore.Authorization;
@@ -14,7 +14,7 @@ using System.Globalization;
 using System.Text;
 using Newtonsoft.Json;
 
-namespace Alvianda.Software.Portals.COMP.Pages
+namespace Alvianda.Software.Portals.COMD.Pages
 {
     [Authorize]
     public partial class EventViewer : ComponentBase

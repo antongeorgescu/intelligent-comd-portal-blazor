@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.Extensions.Configuration;
 
-namespace Alvianda.Software.Portals.COMP.Data
+namespace Alvianda.Software.Portals.COMD.Data
 {
     public class CustomAuthorizationMessageHandler : AuthorizationMessageHandler
     {

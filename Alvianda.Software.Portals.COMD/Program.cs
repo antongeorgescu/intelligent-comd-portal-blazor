@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net.Http;
 using Microsoft.Extensions.Configuration;
-using Alvianda.Software.Portals.COMP.Data;
+using Alvianda.Software.Portals.COMD.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace Alvianda.Software.Portals.COMP
+namespace Alvianda.Software.Portals.COMD
 {
     public class Program
     {

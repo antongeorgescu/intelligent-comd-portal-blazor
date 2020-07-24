@@ -23,7 +23,7 @@ using ChartJs.Blazor.ChartJS.Common.Axes;
 using ChartJs.Blazor.ChartJS.Common.Axes.Ticks;
 using ChartJs.Blazor.ChartJS.Common.Handlers;
 
-namespace Alvianda.Software.Portals.COMP.Pages
+namespace Alvianda.Software.Portals.COMD.Pages
 {
 
     [Authorize]

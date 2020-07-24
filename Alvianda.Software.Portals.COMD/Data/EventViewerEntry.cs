@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Alvianda.Software.Portals.COMP.Data
+namespace Alvianda.Software.Portals.COMD.Data
 {
     public class EventViewerEntry
     {

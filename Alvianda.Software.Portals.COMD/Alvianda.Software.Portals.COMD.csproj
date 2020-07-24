@@ -7,8 +7,8 @@
 
   <PropertyGroup>
     <BlazorWebAssemblyEnableLinking>false</BlazorWebAssemblyEnableLinking>
-    <RootNamespace>Alvianda.Software.Portals.COMP</RootNamespace>
-    <AssemblyName>Alvianda.Software.Portals.COMP</AssemblyName>
+    <RootNamespace>Alvianda.Software.Portals.COMD</RootNamespace>
+    <AssemblyName>Alvianda.Software.Portals.COMD</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

@@ -10,7 +10,7 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace Alvianda.Software.Portals.COMP.Data
+namespace Alvianda.Software.Portals.COMD.Data
 {
     public interface IEventViewerService
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Alvianda.Software.Portals.COMP.Data
+namespace Alvianda.Software.Portals.COMD.Data
 {
     public class TokenClient
     {
