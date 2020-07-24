@@ -1,4 +1,4 @@
-# Configuration and Operations Monitoring Portal (COMP)
+# Configuration and Operations Monitoring Dashboard (COMD)
 ## Design Option: Blazor with Web Assembly
 
 * Web Assembly compiles code into low-level byte code Web Assembly Modules (WASM) that Web browsers can directly execute without having to parse a source file.
