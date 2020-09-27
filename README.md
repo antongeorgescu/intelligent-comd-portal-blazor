@@ -19,8 +19,14 @@ The rich client is using a Single Page Application (SPA) implementation that enh
 
 The design makes use of **Command-Query-Separation pattern (CQRS)** where the data model powering the services middle-tier is divided into **commands** (i.e. change the state of a system but do not return a value) and **queries** (i.e. return a result and do not change the observable state of the system) depending on the directin of data (writing vs reading) 
 
-Below is the component diagram view.
+Below is the component diagram view.</br>
+
 ![iCOM Dashboard Design](https://user-images.githubusercontent.com/6631390/88387494-8b9c3680-cd80-11ea-9fec-29d169cd8200.png)
+
+More reading at:</br></br>
+https://martinfowler.com/bliki/CQRS.html</br>
+https://martinfowler.com/bliki/CommandQuerySeparation.html
+
 
 ## Implementation Option: Blazor with Web Assembly
 
