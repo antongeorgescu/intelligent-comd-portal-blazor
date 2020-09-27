@@ -17,6 +17,8 @@ The design is based on a rich client/action & data service pattern, with a combi
 
 The rich client is using a Single Page Application (SPA) implementation that enhances the user experience and decreases the traffic between the browser and the backend service.
 
+The design makes use of CommandQuerySeparation pattern (CQRS) where the data model powering the services middle-tier is divided into **commands** (i.e. change the state of a system but do not return a value) and **queries** (i.e. return a result and do not change the observable state of the system) depending on the directin of data (writing vs reading) 
+
 Below is the component diagram view.
 ![iCOM Dashboard Design](https://user-images.githubusercontent.com/6631390/88387494-8b9c3680-cd80-11ea-9fec-29d169cd8200.png)
 
